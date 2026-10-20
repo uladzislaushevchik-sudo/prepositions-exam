@@ -1,15 +1,19 @@
 <!DOCTYPE html>
-<html lang="ru"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Exam · Prepositions</title>
-<style>body{font-family:system-ui;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#f0f4f8;color:#333}
-.box{text-align:center;padding:24px}.spin{width:28px;height:28px;border:3px solid #ccc;border-top-color:#0D47A1;border-radius:50%;animation:s 0.8s linear infinite;margin:0 auto 12px}
-@keyframes s{to{transform:rotate(360deg)}}</style>
-</head><body>
-<div class="box"><div class="spin"></div><div>Загрузка экзамена…</div></div>
+<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Exam · Prepositions</title>
+<style>body{font-family:system-ui;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#f0f4f8}.s{width:28px;height:28px;border:3px solid #ccc;border-top-color:#0D47A1;border-radius:50%;animation:a .8s linear infinite;margin:0 auto 12px}@keyframes a{to{transform:rotate(360deg)}}</style></head><body>
+<div style="text-align:center"><div class="s"></div><div id="m">Загрузка экзамена…</div></div>
 <script>
-// PLACEHOLDER - will replace via second commit if needed
-location.replace('https://htmlpreview.github.io/?https://raw.githubusercontent.com/uladzislaushevchik-sudo/prepositions-exam/main/exam.html');
-</script>
-</body></html>
+const BASE="https://raw.githubusercontent.com/uladzislaushevchik-sudo/prepositions-exam/main/";
+async function load(){
+  const [a,b]=await Promise.all([
+    fetch(BASE+"p1.txt").then(r=>r.text()),
+    fetch(BASE+"p2.txt").then(r=>r.text())
+  ]);
+  const B64=(a+b).trim();
+  const bin=Uint8Array.from(atob(B64),c=>c.charCodeAt(0));
+  const raw=await new Response(new Blob([bin]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer();
+  const t=new TextDecoder().decode(raw);
+  document.open();document.write(t);document.close();
+}
+load().catch(e=>{document.getElementById("m").textContent="Ошибка: "+e});
+</script></body></html>
