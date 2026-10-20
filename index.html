@@ -3,9 +3,9 @@
 <style>body{font-family:system-ui;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#f0f4f8}.s{width:28px;height:28px;border:3px solid #ccc;border-top-color:#0D47A1;border-radius:50%;animation:a .8s linear infinite;margin:0 auto 12px}@keyframes a{to{transform:rotate(360deg)}}</style></head><body>
 <div style="text-align:center"><div class="s"></div><div id="m">Загрузка экзамена…</div></div>
 <script>
-const BASE="https://cdn.jsdelivr.net/gh/uladzislaushevchik-sudo/prepositions-exam@main/";
+const BASE="https://cdn.jsdelivr.net/gh/uladzislaushevchik-sudo/prepositions-exam@2433c1af16436b08137df8ce090956d992fc60de/";
 async function load(){
-  const parts=await Promise.all([0,1,2,3,4,5,6,7].map(i=>fetch(BASE+"q"+i+".txt?t="+Date.now()).then(r=>{if(!r.ok)throw new Error(r.status+" q"+i);return r.text()})));
+  const parts=await Promise.all([0,1,2,3,4,5,6,7].map(i=>fetch(BASE+"q"+i+".txt").then(r=>{if(!r.ok)throw new Error(r.status+" q"+i);return r.text()})));
   const B64=parts.map(s=>s.trim()).join("");
   const bin=Uint8Array.from(atob(B64),c=>c.charCodeAt(0));
   const raw=await new Response(new Blob([bin]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer();
